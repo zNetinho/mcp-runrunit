@@ -140,7 +140,9 @@ Depois de publicado no npm, qualquer pessoa pode usar com `npx` sem clonar o rep
 
 ## Cursor Skills (evidências, PR, comentários na task, agents)
 
-O pacote inclui a pasta `cursor-skills/` com skills para uso no Cursor: **registrar-evidencias**, **upload-image-cloudinary**, **create-pr-github**, **comentar-task-runrunit**, **code-reviewer**. Para o Cursor descobri-las, copie (ou crie link) das pastas em `node_modules/mcp-runrunit/cursor-skills/` para um destes diretórios:
+O pacote inclui a pasta `cursor-skills/` com skills para uso no Cursor: **registrar-evidencias**, **upload-image-cloudinary**, **create-pr-github**, **comentar-task-runrunit**, **code-reviewer**, **install-cursor-team-skills** (atalho que orienta usar a tool abaixo). Para instalar ou sincronizar tudo no PC de um colega, use a tool MCP **`runrunit_install_cursor_skills`** (recomendado: `dry_run: true` primeiro; usa `os.homedir()` e funciona em Windows, macOS e Linux). Parâmetros opcionais: `skill_names`, `target` (`global` ou `project` + `project_root`), `source_dir` se a pasta não for encontrada ao lado do pacote.
+
+Alternativa manual: copie (ou crie link) das pastas em `node_modules/mcp-runrunit/cursor-skills/` para um destes diretórios:
 
 - **Global:** `~/.cursor/skills/` (ex.: `~/.cursor/skills/registrar-evidencias`, etc.)
 - **Por projeto:** `.cursor/skills/` ou `.agents/skills/` na raiz do projeto
@@ -186,6 +188,12 @@ As skills que fazem upload de imagens (evidências em PRs e comentários Runrun.
 | `runrunit_discord_list_channels` | Lista canais do servidor Discord. guild_id opcional (usa DISCORD_GUILD_ID ou resolve por DISCORD_CHANNEL_ID). |
 | `runrunit_discord_get_or_create_channel` | Obtém ou cria um canal por cliente Runrun.it (1 canal por cliente). client_id ou client_name (ex.: "Client 1" → slug client-1). Retorna channel_id e channel_name; use antes de enviar mensagens. |
 
+### Cursor (skills do pacote)
+
+| Ferramenta | Descrição |
+|------------|-----------|
+| `runrunit_install_cursor_skills` | Copia as pastas de `cursor-skills/` do pacote para `~/.cursor/skills` (global) ou para `<project_root>/.cursor/skills` (`target: project`). Útil para onboard da equipe; escrita no diretório home do usuário que executa o processo do MCP. |
+
 ### Skills
 
 Skills em `cursor-skills/`:
@@ -197,6 +205,7 @@ Skills em `cursor-skills/`:
 | `upload-image-cloudinary` | Upload de imagens para Cloudinary e retorno de URLs públicas. Usar quando screenshots ou evidências precisarem ser hospedadas (ex.: body da PR, docs). Requer CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY e CLOUDINARY_API_SECRET. |
 | `comentar-task-runrunit` | Orquestra evidências e comentário na tarefa do Runrun.it: captura antes/depois, upload no Cloudinary, opcionalmente abre PR e cria comentário na task com resumo, passo a passo de teste e links; grava link_da_branch na task se houver PR. |
 | `create-pr-github` | Cria um pull request bem estruturado, com descrição, rótulos, revisores e evidências visuais. Inclui preparar branch, descrição, checklist e output obrigatório (link da PR, branch, ambiente de destino). |
+| `install-cursor-team-skills` | Skill mínima que indica chamar a tool `runrunit_install_cursor_skills` para sincronizar as demais skills do pacote no Cursor. |
 
 ### Agents
 

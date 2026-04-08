@@ -4,6 +4,12 @@ All notable changes to the mcp-runrunit package will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.3.0] - 2026-04-07
+
+### Added
+- MCP tool `runrunit_install_cursor_skills` to copy skills from the package `cursor-skills/` to `~/.cursor/skills` (global) or `<project_root>/.cursor/skills`, with optional `dry_run`, `skill_names`, `source_dir`, and `target`/`project_root`.
+- Packaged skill `install-cursor-team-skills` pointing agents to that tool instead of manual shell copies.
+
 ## [1.2.2] - 2026-03-16
 ### Update
 - Update readme for use this MCP and list tools with descriptions
