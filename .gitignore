@@ -9,3 +9,6 @@ dist/*
 
 # cursor
 .cursor/*
+
+# logs
+*.log
