@@ -4,7 +4,7 @@
   "title": "Runrun.it MCP Server",
   "description": "MCP server for Runrun.it: Tasks, Comments, Projects",
   "repository": {
-    "url": "https://github.com/zNetinho/plugin-sentinel-mcp.git",
+    "url": "https://github.com/zNetinho/mcp-runrunit.git",
     "source": "github"
   },
   "version": "1.2.3",
