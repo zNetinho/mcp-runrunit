@@ -11,8 +11,9 @@ import * as devSuggestions from "../../application/dev_suggestions.js";
 import * as projects from "../../application/projects.js";
 import * as tasks from "../../application/tasks.js";
 import { taskUpdateToApiPayload } from "../../infrastructure/mappers/custom_fields_mapper.js";
+import { installCursorSkills } from "../../application/install-cursor-skills.js";
 import { RunrunitAPIError } from "../driven/api.js";
-import path from "path";
+  
 
 export const TOOLS = [
   /**
@@ -38,23 +39,6 @@ export const TOOLS = [
   /**
    * @namedTools runrunit_list_tasks
    */
-  {
-    name: "runrunit_list_projects",
-    description:
-      "List all projects from Runrun.it. Optional filters: client_id, project_group_id, is_closed, is_active, page, limit.",
-    inputSchema: {
-      type: "object" as const,
-      properties: {
-        client_id: { type: "number", description: "Filter by client ID" },
-        project_group_id: { type: "number", description: "Filter by project group ID" },
-        is_closed: { type: "boolean", description: "Filter by closed state" },
-        is_active: { type: "boolean", description: "Filter by active state" },
-        page: { type: "number", description: "Page number (default 1)" },
-        limit: { type: "number", description: "Items per page (1-100)" },
-      },
-      required: [],
-    },
-  },
   {
     name: "runrunit_list_tasks",
     description:
@@ -443,6 +427,47 @@ export const TOOLS = [
         },
       },
       required: ["task_id"],
+    },
+  },
+  /**
+   * @namedTools runrunit_install_cursor_skills
+   */
+  {
+    name: "runrunit_install_cursor_skills",
+    description:
+      "Copies bundled Cursor skills from the mcp-runrunit package (cursor-skills/) into the user's Cursor skills directory (~/.cursor/skills on any OS: uses os.homedir). Use to onboard teammates or sync team SKILL.md workflows. Prefer dry_run:true first to preview. Optional skill_names limits which folders to copy; target:global (default) or project with project_root for .cursor/skills in a repo; source_dir overrides auto-discovery of cursor-skills.",
+    inputSchema: {
+      type: "object" as const,
+      properties: {
+        dry_run: {
+          type: "boolean",
+          description:
+            "If true, only lists what would be copied (no writes). Recommended before first sync.",
+        },
+        skill_names: {
+          type: "array",
+          items: { type: "string" },
+          description:
+            "Optional folder names under cursor-skills to copy (e.g. registrar-evidencias). If omitted, copies every subfolder that contains SKILL.md.",
+        },
+        target: {
+          type: "string",
+          enum: ["global", "project"],
+          description:
+            "global = ~/.cursor/skills (default). project = <project_root>/.cursor/skills — requires project_root when target is project.",
+        },
+        project_root: {
+          type: "string",
+          description:
+            "Absolute path to the project root when target is project. Ignored when target is global.",
+        },
+        source_dir: {
+          type: "string",
+          description:
+            "Optional absolute path to a cursor-skills directory. If omitted, resolves next to the installed mcp-runrunit package.",
+        },
+      },
+      required: [],
     },
   },
   /**
@@ -871,6 +896,25 @@ export function createMcpServer(): Server {
             String(a.file_path),
             a.public_id != null ? String(a.public_id) : undefined
           );
+          break;
+        }
+        case "runrunit_install_cursor_skills": {
+          const targetRaw = a.target != null ? String(a.target).trim() : "";
+          const target =
+            targetRaw === "project"
+              ? ("project" as const)
+              : ("global" as const);
+          result = installCursorSkills({
+            dry_run: a.dry_run === true,
+            skill_names: Array.isArray(a.skill_names)
+              ? (a.skill_names as unknown[]).map((x) => String(x))
+              : undefined,
+            target,
+            project_root:
+              a.project_root != null ? String(a.project_root) : undefined,
+            source_dir:
+              a.source_dir != null ? String(a.source_dir) : undefined,
+          });
           break;
         }
         case "runrunit_discord_send_message": {
