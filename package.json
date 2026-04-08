@@ -1,6 +1,6 @@
 {
   "name": "mcp-runrunit",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "MCP server for Runrun.it API - Tasks, Comments, Projects",
   "type": "module",
   "main": "dist/index.js",
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^20.0.0",
-    "esbuild": "^0.24.2",
+    "esbuild": "^0.28.0",
     "typescript": "^5.0.0"
   }
 }
